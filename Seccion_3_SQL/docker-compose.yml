@@ -1,0 +1,40 @@
+# =============================================================================
+# Docker Compose - PostgreSQL para Seccion SQL de la Prueba Tecnica
+# =============================================================================
+# Se eligio Docker porque permite levantar PostgreSQL sin instalarlo
+# directamente en Windows, evitando conflictos de version y facilitando
+# la limpieza posterior (basta con hacer docker compose down).
+# =============================================================================
+
+version: '3.8'
+
+services:
+  postgres:
+    # Se usa PostgreSQL 15 por ser una version estable y ampliamente soportada.
+    # Incluye soporte nativo para UPSERT (ON CONFLICT DO UPDATE) que se necesita
+    # en el stored procedure de la seccion 3.2.
+    image: postgres:15
+    container_name: etl_postgres
+    environment:
+      # Credenciales configuradas para el entorno de prueba.
+      # En produccion estas irian como secrets o variables de entorno externas.
+      POSTGRES_USER: etl_user
+      POSTGRES_PASSWORD: etl_pass
+      POSTGRES_DB: etl_prueba
+    ports:
+      # Se mapea el puerto estandar de PostgreSQL (5432) al host,
+      # permitiendo conectar desde DBeaver, psql o cualquier cliente SQL
+      # apuntando a localhost:5432.
+      - "5432:5432"
+    volumes:
+      # Volume nombrado para persistir los datos de PostgreSQL entre reinicios
+      # del contenedor. Sin esto, los datos se perderian al hacer docker compose down.
+      - pgdata:/var/lib/postgresql/data
+      # Se monta la carpeta del proyecto como /data dentro del contenedor.
+      # Esto es NECESARIO para que el comando COPY de PostgreSQL pueda leer
+      # los archivos CSV (flights_5000.csv, flights_10000.csv) directamente
+      # desde el filesystem del contenedor.
+      - ./:/data
+
+volumes:
+  pgdata:

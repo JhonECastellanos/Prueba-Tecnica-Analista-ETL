@@ -1,0 +1,23 @@
+# Scripts generadores (no son entregables)
+generar_pdf_explicativo.py
+generar_excel.py
+_temp_gen_pdf.py
+
+# PDF de la prueba original (no publicar)
+Prueba_Tecnica_AnalistadeProcesos_ETL.pdf
+
+# Carpeta auxiliar
+Prueba_AnalistaETL/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
